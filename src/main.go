@@ -8,14 +8,14 @@ import (
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
-	utils.SuccessResponse("Main", w)
+	utils.SuccessResponse([]string{"Main"}, w)
 }
 
 func withPathParams(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	if userId, ok := params["userId"]; ok {
-		utils.SuccessResponse(userId, w)
+		utils.SuccessResponse([]string{userId}, w)
 	}
 }
 
@@ -24,7 +24,7 @@ func withQuery(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(query)
 
-	utils.SuccessResponse("", w)
+	utils.SuccessResponse([]string{""}, w)
 }
 
 func main() {

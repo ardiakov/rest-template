@@ -1,15 +1,38 @@
 package utils
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
-func SuccessResponse(data string, w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "success","data": "` + data + `"}`))
+type Response struct {
+	Status string   `json:"status"`
+	Data   []string `json:"data"`
 }
 
-func ErrorResponse(data []byte, w http.ResponseWriter, code int) {
+func SuccessResponse(data []string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	response := Response{
+		Status: "success",
+		Data:   data,
+	}
+
+	json, _ := json.Marshal(response)
+
+	w.Write(json)
+}
+
+func ErrorResponse(data []string, w http.ResponseWriter, code int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(data)
+
+	response := Response{
+		Status: "error",
+		Data:   data,
+	}
+
+	json, _ := json.Marshal(response)
+	w.Write(json)
 }
